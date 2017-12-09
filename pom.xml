@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
@@ -103,7 +102,6 @@
          name of the base package evolves with major release numbers
          (see "commons.osgi.symbolicName", below). -->
     <commons.componentid>numbers</commons.componentid>
-    <commons.module.name>org.apache.commons.numbers</commons.module.name>
     <!-- This value must reflect the current name of the base package. -->
     <commons.osgi.symbolicName>org.apache.commons.numbers</commons.osgi.symbolicName>
     <!-- OSGi -->
@@ -156,9 +154,9 @@
     -->
     <commons.release.name>commons-numbers-${project.version}</commons.release.name>
     <!-- Java8+ requires additional Javadoc qualifier for MathJax (default to empty). -->
-    <allowscript.javadoc.qualifier></allowscript.javadoc.qualifier>
+    <allowscript.javadoc.qualifier/>
     <!-- Invalid flag for old javadoc versions (default to empty). -->
-    <doclint.javadoc.qualifier></doclint.javadoc.qualifier>
+    <doclint.javadoc.qualifier/>
   </properties>
 
   <build>
@@ -243,7 +241,11 @@
             <exclude>src/site/resources/txt/userguide/stress/dh/**</exclude>
             <exclude>src/site/resources/txt/userguide/stress/tu/**</exclude>
             <exclude>dist-archive/**</exclude>
-          </excludes>
+          <exclude>**/.starts/**</exclude>
+                        <exclude>**/jdeps-cache/**</exclude>
+                        <exclude>**/.travis.yml</exclude>
+                        <exclude>**/NOW</exclude>
+                    </excludes>
         </configuration>
       </plugin>
 
@@ -258,7 +260,21 @@
         </configuration>
       </plugin>
       
-    </plugins>
+    <plugin>
+                <groupId>edu.illinois</groupId>
+                <artifactId>starts-maven-plugin</artifactId>
+                <version>1.3</version>
+                <executions>
+                    <execution>
+                        <id>starts</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>starts</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
 
     <pluginManagement>
       <plugins>
@@ -576,7 +592,9 @@
 
     <profile>
       <id>javadoc8</id>
-      <activation><jdk>[1.8,)</jdk></activation>
+      <activation>
+                <jdk>[1.8,)</jdk>
+            </activation>
       <properties>
         <!-- Java8+ requires additional Javadoc qualifier for scripts such as MathJax -->
         <allowscript.javadoc.qualifier>--allow-script-in-comments</allowscript.javadoc.qualifier>
@@ -584,7 +602,9 @@
     </profile>
     <profile>
       <id>javadoc7</id>
-      <activation><jdk>[1.7,)</jdk></activation>
+      <activation>
+                <jdk>[1.7,)</jdk>
+            </activation>
       <properties>
         <!-- Invalid flag in earlier versions of javadoc -->
         <doclint.javadoc.qualifier>-Xdoclint:all</doclint.javadoc.qualifier>
@@ -598,10 +618,8 @@
     <module>commons-numbers-primes</module>
     <module>commons-numbers-quaternion</module>
     <module>commons-numbers-fraction</module>
-    <module>commons-numbers-angle</module>
     <module>commons-numbers-gamma</module>
-    <module>commons-numbers-combinatorics</module>
-    <module>commons-numbers-arrays</module>
   </modules>
 
 </project>
+
